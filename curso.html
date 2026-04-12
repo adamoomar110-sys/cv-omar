@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Bootcamp: AI & Agents | Omar Adamo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { overflow-y: hidden; } /* SPA feel */
+        .app-container {
+            display: flex;
+            height: 100vh;
+            padding-top: 70px; 
+        }
+        
+        /* Left Panel - Bot Tutor */
+        .tutor-panel {
+            width: 35%;
+            background: rgba(10, 10, 15, 0.85);
+            border-right: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            backdrop-filter: blur(20px);
+        }
+        
+        .tutor-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .tutor-header .avatar { font-size: 2rem; }
+        .tutor-header h3 {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            font-family: var(--font-mono);
+        }
+
+        .chat-box {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+        }
+        
+        .chat-box::-webkit-scrollbar { width: 6px; }
+        .chat-box::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 10px; }
+
+        .msg-container { display: flex; width: 100%; margin-bottom: 15px; }
+        .msg-container.bot { justify-content: flex-start; }
+        .msg-container.user { justify-content: flex-end; }
+        
+        .bot-msg, .user-msg {
+            max-width: 85%;
+            padding: 12px 18px;
+            border-radius: 12px;
+            line-height: 1.5;
+        }
+        
+        .bot-msg {
+            background: rgba(34, 211, 238, 0.1);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            color: #e2e8f0;
+            border-top-left-radius: 0;
+        }
+        
+        .user-msg {
+            background: rgba(129, 140, 248, 0.2);
+            border: 1px solid rgba(129, 140, 248, 0.3);
+            color: white;
+            border-top-right-radius: 0;
+        }
+        
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .chat-input-area input {
+            flex: 1;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-family: var(--font-main);
+            outline: none;
+        }
+        
+        .chat-input-area input:focus { border-color: var(--primary-color); }
+        .chat-input-area button { padding: 12px 20px; cursor: pointer; }
+
+        /* Right Panel - Course Content */
+        .content-panel {
+            width: 65%;
+            padding: 30px 40px;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .content-panel::-webkit-scrollbar { width: 8px; }
+        .content-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        
+        .course-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: none;
+        }
+
+        .course-card.active {
+            opacity: 1;
+            transform: translateY(0);
+            display: block;
+        }
+
+        .semester-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .course-card h2 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 15px;
+        }
+
+        .course-card h3 {
+            font-size: 1.3rem;
+            color: white;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        .course-card p {
+            color: var(--text-dim);
+            font-size: 1rem;
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+        
+        .course-card ul {
+            margin-left: 20px;
+            color: var(--text-dim);
+            margin-bottom: 15px;
+        }
+        
+        .course-card li { margin-bottom: 8px; }
+        
+        .tag {
+            display: inline-block;
+            background: rgba(129, 140, 248, 0.15);
+            color: var(--secondary-color);
+            padding: 5px 12px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(129, 140, 248, 0.3);
+        }
+
+        .nav-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+        }
+
+        .module-indicator {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-family: var(--font-mono);
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            body { overflow-y: auto; }
+            .app-container {
+                flex-direction: column;
+                height: auto;
+                padding-top: 60px;
+            }
+            .tutor-panel {
+                width: 100%;
+                height: 55vh;
+                border-right: none;
+                border-bottom: 1px solid var(--glass-border);
+            }
+            .content-panel {
+                width: 100%;
+                height: auto;
+                padding: 20px;
+                overflow-y: visible;
+            }
+            .course-card h2 { font-size: 1.6rem; }
+            .course-card { padding: 20px; }
+            .module-indicator {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 10px;
+                display: inline-block;
+            }
+            .nav-progress {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .nav-progress .btn { margin: 0; width: 100%; text-align: center; }
+            .nav-content { padding: 0 20px; }
+            .logo { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <nav id="navbar" style="background: rgba(2, 6, 23, 0.95); padding: 10px 0;">
+        <div class="nav-content">
+            <div class="logo" style="font-size:1.2rem;">University Bootcamp <span>| 10 Módulos</span></div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="btn secondary" style="padding: 6px 15px; font-size: 0.8rem;">Atrás al CV</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="app-container">
+        <!-- Panel Izquierdo: Bot -->
+        <aside class="tutor-panel">
+            <div class="tutor-header">
+                <div class="avatar">🎓</div>
+                <div>
+                    <h3>Omar.Professor_v3</h3>
+                    <span style="color:var(--text-dim); font-size: 0.8rem; font-family: var(--font-mono);">Currícula: Nivel Universitario</span>
+                </div>
+            </div>
+            
+            <div class="chat-box" id="bot-chat"></div>
+            
+            <div class="chat-input-area">
+                <input type="text" id="user-input" placeholder="Interactúa con la clase...">
+                <button class="btn primary" id="send-btn">Enviar</button>
+            </div>
+        </aside>
+
+        <!-- Panel Derecho: Contenido -->
+        <main class="content-panel">
+            
+            <!-- PORTADA -->
+            <div class="course-card active" id="module-0">
+                <div class="semester-badge">Syllabus General</div>
+                <h2>Ingeniería AI: El Programa Completo</h2>
+                <p>Bienvenido al Campus Interactivo. Hemos estructurado el conocimiento de Omar Adamo en 10 niveles académicos rigurosos, divididos en 3 semestres.</p>
+                <ul>
+                    <li><strong>Semestre 1:</strong> Core Engineering (Backend Híbrido, SQL, Infra, Frontend).</li>
+                    <li><strong>Semestre 2:</strong> Data & Modelos (Prompt Eng, RAG Extremo, Parseo neuronal).</li>
+                    <li><strong>Semestre 3:</strong> Sistemas Autónomos (Multi-Agentes y AI Financiera Crítica).</li>
+                </ul>
+                <div style="margin-top: 30px;">
+                    <button class="btn primary highlight-btn" onclick="loadModule(1, 'comenzar')">Iniciar Semestre 1</button>
+                </div>
+            </div>
+
+            <!-- MOD 1 -->
+            <div class="course-card" id="module-1">
+                <div class="module-indicator">1 / 10</div>
+                <div class="semester-badge">Semestre 1</div>
+                <h2>Mód 1: Fundamentos Híbridos</h2>
+                <h3>La base del Asincronismo (Python & C++)</h3>
+                <p>Manejar millones de tokens no es fácil. Omar utiliza un enfoque Senior en Python explotando <code>asyncio</code> y el <code>Global Interpreter Lock (GIL)</code>.</p>
+                <p>Cuando el procesamiento bloquea el hilo central, se externalizan las rutinas matemáticas a extensiones compiladas (C++) o servicios en tiempo real (Node.js).</p>
+                <div class="tag">Python Async</div><div class="tag">C++ Interop</div><div class="tag">Node.js</div>
+                <div class="nav-progress">
+                    <button class="btn secondary" onclick="loadModule(0, 'volver')">Volver</button>
+                    <button class="btn secondary" onclick="loadModule(2, 'siguiente')">Siguiente Módulo</button>
+                </div>
+            </div>
+
+            <!-- MOD 2 -->
+            <div class="course-card" id="module-2">
+                <div class="module-indicator">2 / 10</div>
+                <div class="semester-badge">Semestre 1</div>
+                <h2>Mód 2: Arquitectura de Persistencia Real</h2>
+                <h3>Bases de Datos Relacionales Avanzadas</h3>
+                <p>El almacenamiento de datos crudos. Un AI Engineer debe dominar SQL nativo, diseñar modelos Normalizados (1NF a 3NF), y gestionar índices y transacciones robustas (ACID) antes de saltar a las Bases Vectoriales.</p>
+                <div class="tag">SQL Server</div><div class="tag">PostgreSQL</div><div class="tag">Data Modeling</div>
+                <div class="nav-progress">
+                    <button class="btn secondary" onclick="loadModule(1, 'volver')">Volver</button>
+                    <button class="btn secondary" onclick="loadModule(3, 'siguiente')">Siguiente Módulo</button>
+                </div>
+            </div>
+
+            <!-- MOD 3 -->
+            <div class="course-card" id="module-3">
+                <div class="module-indicator">3 / 10</div>
+                <div class="semester-badge">Semestre 1</div>
+                <h2>Mód 3: Infraestructura y DevOps</h2>
+                <h3>Despliegue de Entornos Críticos</h3>
+                <p>Llevar código de tu máquina al servidor. Implementación de contenedores Docker para aislar dependencias complejas de Machine Learning. Configuración en la nube (CI/CD pipelines) para despliegues "zero-downtime".</p>
+                <div class="tag">Docker</div><div class="tag">CI/CD</div><div class="tag">Git Control</div>
+                <div class="nav-progress">
+                    <button class="btn secondary" onclick="loadModule(2, 'volver')">Volver</button>
+                    <button class="btn secondary" onclick="loadModule(4, 'siguiente')">Siguiente Módulo</button>
+                </div>
+            </div>
+
+            <!-- MOD 4 -->
+            <div class="course-card" id="module-4">
+                <div class="module-indicator">4 / 10</div>
+                <div class="semester-badge">Semestre 1</div>
+                <h2>Mód 4: React y UI/UX Premium</h2>
+                <h3>Consumo de APIs desde el Cliente</h3>
+                <p>La IA no sirve si el usuario no puede consumirla. Basado en su certificación en React (G2 Bootcamp) y habilidades CSS.</p>
+                <ul><li>Glassmorphism.</li><li>Componentización.</li><li>Integración Asíncrona con el Backend AI.</li></ul>
+                <div class="tag">React.js</div><div class="tag">Advanced CSS</div><div class="tag">SPA</div>
+                <div class="nav-progress">
+                    <button class="btn secondary" onclick="loadModule(3, 'volver')">Volver</button>
+                    <button class="btn primary" onclick="loadModule(5, 'comenzar semestre 2')">Iniciar Semestre 2 🚀</button>
+                </div>
+            </div>
+
+            <!-- MOD 5 -->
+            <div class="course-card" id="module-5">
+                <div class="module-indicator">5 / 10</div>
+                <div class="semester-badge">Semestre 2</div>
+                <h2>Mód 5: Fundamentos LLM & Prompts Estructurales</h2>
+                <h3>Control de Inferencia Base</h3>
+                <p>Adentrándonos en el Ecosistema IA. Uso nativo de OpenAI SDK para llamadas directas, control de parámetros de salida (Temperature, Top-P) y Prompt Engineering avanzado (Zero-shot, Few-shot) para forzar salidas JSON estructuradas.</p>
+                <div class="tag">OpenAI SDK</div><div class="tag">Prompt Engineering</div><div class="tag">LLMs</div>
+                <div class="nav-progress">
+                    <button class="btn secondary" onclick="loadModule(4, 'volver')">Volver</button>
+                    <button class="btn secondary" onclick="loadModule(6, 'siguiente')">Siguiente Módulo</button>
+                </div>
+            </div>
+
+            <!-- MOD 6 -->
+            <div class="course-card" id="module-6">
+                <div class="module-indicator">6 / 10</div>
+                <div class="semester-badge">Semestre 2</div>
+                <h2>Mód 6: Generación Aumentada por Recuperación (RAG)</h2>
+                <h3>Inyectando Verdad en el Modelo</h3>
+                <p>Las Alucinaciones se rompen con datos. Construcción de RAG pipelines. Entendiendo cómo los modelos de Embeddings (ej. text-embedding-ada) convierten conocimiento semántico en arrays de flotantes almacenados en **Vector DBs** (Pinecone/Chroma).</p>
+                <div class="tag">Vector DBs</div><div class="tag">Semantic Search</div><div class="tag">RAG Frameworks</div>
+                <div class="nav-progress">
+                    <button class="btn secondary" onclick="loadModule(5, 'volver')">Volver</button>
+                    <button class="btn secondary" onclick="loadModule(7, 'siguiente')">Siguiente Módulo</button>
+                </div>
+            </div>
+
+            <!-- MOD 7 -->
+            <div class="course-card" id="module-7">
+                <div class="module-indicator">7 / 10</div>
+                <div class="semester-badge">Semestre 2</div>
+                <h2>Mód 7: Extracción de Entidades y Parseo</h2>
+                <h3>Proyecto: Libris Document Intel</h3>
+                <p>Omar aplicó los módulos 5 y 6 construyendo el proyecto Libris: Un sistema que ingesta dinámicamente DOCX y EPUBs en crudo, y usa LLMs no para "charlar", sino para realizar "Entity Extraction" con precisión milimétrica.</p>
+                <div class="tag">Document Parsing</div><div class="tag">Entity Extraction</div>
+                <div class="nav-progress">
+                    <button class="btn secondary" onclick="loadModule(6, 'volver')">Volver</button>
+                    <button class="btn primary" onclick="loadModule(8, 'comenzar semestre 3')">Iniciar Semestre 3 (Core) 🚀</button>
+                </div>
+            </div>
+
+            <!-- MOD 8 -->
+            <div class="course-card" id="module-8">
+                <div class="module-indicator">8 / 10</div>
+                <div class="semester-badge">Semestre 3</div>
+                <h2>Mód 8: Patrones de Modelos Multi-Agente</h2>
+                <h3>El Salto de Bot a Sistema Autónomo</h3>
+                <p>Los grandes proyectos necesitan cerebros divididos. Uso de LangChain y CrewAI para instanciar subagentes.</p>
+                <ul>
+                    <li><strong>Reasoning Agent:</strong> Planifican los pasos lógicos.</li>
+                    <li><strong>Tool-using Agent:</strong> Usan APIs externas, calculadoras, o escrapean webs.</li>
+                </ul>
+                <div class="tag">LangChain</div><div class="tag">CrewAI</div><div class="tag">Autonomous Agents</div>
+                <div class="nav-progress">
+                    <button class="btn secondary" onclick="loadModule(7, 'volver')">Volver</button>
+                    <button class="btn secondary" onclick="loadModule(9, 'siguiente')">Siguiente Módulo</button>
+                </div>
+            </div>
+
+            <!-- MOD 9 -->
+            <div class="course-card" id="module-9">
+                <div class="module-indicator">9 / 10</div>
+                <div class="semester-badge">Semestre 3</div>
+                <h2>Mód 9: Ecosistemas de Memoria Continua</h2>
+                <h3>Proyecto: Filtro (AI People Analytics)</h3>
+                <p>Aplicando lo aprendido: Filtro es una plataforma masiva donde evalúan cientos de currículums. Aquí los multi-agentes deben analizar candidatos cruzándolos con requisitos laborales, requiriendo **State & Memory Management** para que las comparaciones persistan en el tiempo.</p>
+                <div class="tag">State Control</div><div class="tag">Memory Persistance</div><div class="tag">Big Data AI</div>
+                <div class="nav-progress">
+                    <button class="btn secondary" onclick="loadModule(8, 'volver')">Volver</button>
+                    <button class="btn secondary" onclick="loadModule(10, 'siguiente')">Siguiente Módulo</button>
+                </div>
+            </div>
+
+            <!-- MOD 10 -->
+            <div class="course-card" id="module-10">
+                <div class="module-indicator">10 / 10</div>
+                <div class="semester-badge">Semestre 3</div>
+                <h2>Mód 10: Fintech, Tráfico Real y Seguridad</h2>
+                <h3>Proyecto: Chofer Online</h3>
+                <p>La IA es inútil si el sistema falla al cobrar. El gran cierre del nivel Senior recae en la madurez arquitectónica.</p>
+                <p>Omar integró en *Chofer Online* flujos restrictivos de pagos y suscripciones de pasarelas mundiales como **Stripe** y **MercadoPago**, además de reemplazar la validación por SMS (Twilio) desarrollando un motor customizado de OTP (Códigos de Un Solo Uso) por **WhatsApp**.</p>
+                <div class="tag">Stripe API</div><div class="tag">Risk Analysis</div><div class="tag">WhatsApp OTP Dev</div>
+                <div class="nav-progress">
+                    <button class="btn secondary" onclick="loadModule(9, 'volver')">Volver</button>
+                    <button class="btn primary highlight-btn" onclick="terminateCourse()">Graduarme (Finalizar)</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+    
+    <script>
+        const chatBox = document.getElementById('bot-chat');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        // Bot Dialogue Library para los 10 Módulos
+        const dialogues = {
+            m0: "🎓 Bienvenido al Programa de Certificación Avanzado 10x.\n\nHemos expandido todo el currículum. Si estás preparado para revisar en qué consiste el 'Semestre 1' (Fundamentos de Backend), ingresa 'comenzar'.",
+            m1: "▶️ Cargando Módulo 1: Async Python & C++.\n\nTodo experto en IA primero debe dominar la gestión de recursos de Hardware. Leer este enfoque es fundamental. (Escribe 'Siguiente' cuando superes esto).",
+            m2: "▶️ Cargando Módulo 2: Relational Persistence.\n\nSQL Clásico y normalización de bases de datos para ambientes productivos.",
+            m3: "▶️ Cargando Módulo 3: Infra & DevOps.\n\nAprendiendo metodologías de entrega continua, CI/CD y despliegue usando contenedores en entornos Cloud.",
+            m4: "▶️ Cargando Módulo 4: UI/UX en Client-side.\n\nEl cierre del Semestre 1 nos lleva a React y al consumo estético de APIs complejas. ¡Indícame cuándo quieras saltar al Semestre 2!",
+            m5: "▶️ Cargando Módulo 5 (Semestre 2): Prompts & LLM Core.\n\nComenzamos puro Data AI. Aquí controlamos los motores base mediante OpenAI SDK. Un paso fundamental.",
+            m6: "▶️ Cargando Módulo 6: RAG Pipelines.\n\nEmbeddings y Bases de datos Vectoriales. Así es como resolvemos la falta de conocimiento corporativo en la IA.",
+            m7: "▶️ Cargando Módulo 7: Extracción Neuronal.\n\nProyecto Libris; analizando documentos opacos para extraer matrices de entidades. ¿Avanzamos al Semestre 3 de Sistemas Autónomos?",
+            m8: "▶️ Cargando Módulo 8 (Semestre 3): Patrones de Agentes.\n\nImplementando CrewAI y LangChain. El punto de inflexión donde las 'herramientas' piensan y actúan interactuando con APIs.",
+            m9: "▶️ Cargando Módulo 9: Plataformas de Escala (Filtro).\n\nAquí gestionamos un flujo Multi-Agente con Control de Estados (State) y persistencia para Analytics reales en recursos humanos.",
+            m10:"▶️ Cargando Módulo 10: Integraciones Críticas & Transaccionales.\n\nEl Santo Grial. Autenticación OTP por WhatsApp, flujos de riesgo con Stripe y MercadoPago. El perfil de Omar se consagra acá. Ya puedes finalizar.",
+            end: "🎉 ¡Simulación Completada a la Perfección!\n\nEste es el nivel de excelencia que aporta Omar Adamo a los proyectos críticos.\n\nTienes a todos los módulos desbloqueados en el panel derecho por si quieres repasarlos."
+        };
+
+        const expectKeywords = ['siguiente', 'avanzar', 'listo', 'ok', 'si', 'comenzar', 'empezar', 'dale', 'continuar'];
+        let currentBotMod = 0;
+
+        function appendMsg(text, type) {
+            const container = document.createElement('div');
+            container.className = `msg-container ${type}`;
+            const bubble = document.createElement('div');
+            bubble.className = type === 'bot' ? 'bot-msg' : 'user-msg';
+            bubble.innerText = text;
+            container.appendChild(bubble);
+            chatBox.appendChild(container);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function showUIModule(id) {
+            document.querySelectorAll('.course-card').forEach(card => card.classList.remove('active'));
+            document.getElementById(`module-${id}`).classList.add('active');
+        }
+
+        // Connect JS with UI buttons
+        window.loadModule = function(id, textFallback) {
+            appendMsg(textFallback, 'user');
+            setTimeout(() => {
+               currentBotMod = id;
+               showUIModule(currentBotMod);
+               appendMsg(dialogues[`m${currentBotMod}`] || 'Cargando...', 'bot');
+            }, 500);
+        }
+        
+        window.terminateCourse = function() {
+            appendMsg("Graduarme", 'user');
+            setTimeout(() => {
+                appendMsg(dialogues.end, 'bot');
+            }, 600);
+        }
+
+        function handleChatInput(text) {
+            appendMsg(text, 'user');
+            const cleanText = text.toLowerCase().trim();
+            
+            setTimeout(() => {
+                if (cleanText.includes('graduarme') || cleanText.includes('finalizar') || cleanText.includes('terminar')) {
+                    appendMsg(dialogues.end, 'bot');
+                    return;
+                }
+
+                // Any progression word moves it forward implicitly.
+                const isProgression = expectKeywords.some(w => cleanText.includes(w));
+                
+                if (isProgression) {
+                    if(currentBotMod < 10) {
+                        currentBotMod++;
+                        showUIModule(currentBotMod);
+                        appendMsg(dialogues[`m${currentBotMod}`], 'bot');
+                    } else {
+                        appendMsg(dialogues.end, 'bot');
+                    }
+                } else if(cleanText.includes('volver') || cleanText.includes('atras')) {
+                    if (currentBotMod > 0) {
+                        currentBotMod--;
+                        showUIModule(currentBotMod);
+                        appendMsg(`Retrocediendo al módulo ${currentBotMod}. Relee el concepto.`, 'bot');
+                    }
+                } else {
+                     appendMsg("🎓 No tengo ese comando programado en mi matriz actual. Responde con palabras clave como 'Siguiente', 'Avanzar', o 'Volver'.", 'bot');
+                }
+            }, 700);
+        }
+
+        sendBtn.addEventListener('click', () => {
+            if(!userInput.value.trim()) return;
+            handleChatInput(userInput.value);
+            userInput.value = '';
+        });
+
+        userInput.addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') sendBtn.click();
+        });
+
+        // Init
+        setTimeout(() => {
+            appendMsg(dialogues.m0, 'bot');
+        }, 1000);
+
+    </script>
+</body>
+</html>

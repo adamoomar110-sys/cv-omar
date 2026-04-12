@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omar Adamo | AI Python Engineer</title>
+    <meta name="description" content="Portfolio premium de Omar Adamo, experto en Agentes Inteligentes, Python y Desarrollo Full-Stack.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --bg-color: #020617;
+    --glass-bg: rgba(15, 23, 42, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --primary-color: #22d3ee;
+    --primary-glow: rgba(34, 211, 238, 0.3);
+    --secondary-color: #818cf8;
+    --text-main: #f8fafc;
+    --text-dim: #94a3b8;
+    --accent-gradient: linear-gradient(135deg, #22d3ee 0%, #818cf8 100%);
+    --font-main: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: var(--font-main);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Background Animated Blobs */
+.background-blobs {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    filter: blur(80px);
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: move 20s infinite alternate;
+}
+
+.blob-1 {
+    width: 400px;
+    height: 400px;
+    background: var(--primary-color);
+    top: -100px;
+    right: -100px;
+}
+
+.blob-2 {
+    width: 350px;
+    height: 350px;
+    background: var(--secondary-color);
+    bottom: -50px;
+    left: -50px;
+    animation-delay: -5s;
+}
+
+.blob-3 {
+    width: 300px;
+    height: 300px;
+    background: #4f46e5;
+    top: 40%;
+    left: 20%;
+    animation-duration: 25s;
+}
+
+@keyframes move {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(100px, 100px) scale(1.2); }
+}
+
+/* Glassmorphism Sections */
+.glass-section, .glass, .ai-card, .footer-content {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* Navbar */
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    padding: 20px 0;
+}
+
+nav.scrolled {
+    background: rgba(2, 6, 23, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 12px 0;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.nav-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: var(--primary-color);
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--primary-color);
+}
+
+/* Hero Section */
+#hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.terminal-badge {
+    background: #1e293b;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    font-family: var(--font-mono);
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    display: inline-block;
+    margin-bottom: 24px;
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+h1 {
+    font-size: 5rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    letter-spacing: -2px;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+h2 {
+    font-size: 1.75rem;
+    color: var(--text-main);
+    margin-bottom: 24px;
+    font-weight: 400;
+}
+
+.hero-subtitle {
+    max-width: 650px;
+    margin: 0 auto 40px;
+    color: var(--text-dim);
+    font-size: 1.1rem;
+}
+
+.btn {
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.btn.primary {
+    background: var(--primary-color);
+    color: #020617;
+    box-shadow: 0 4px 20px var(--primary-glow);
+}
+
+.btn.primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px var(--primary-glow);
+}
+
+.btn.secondary {
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Sections General */
+main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px 100px;
+}
+
+section {
+    padding: 100px 0;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 50px;
+}
+
+.section-title span {
+    font-family: var(--font-mono);
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+.section-title h3 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.section-title::after {
+    content: '';
+    height: 1px;
+    background: var(--glass-border);
+    flex-grow: 1;
+}
+
+/* About Grid */
+.about-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    padding: 40px;
+}
+
+.about-text p {
+    margin-bottom: 20px;
+    color: var(--text-dim);
+}
+
+.about-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.stat-card {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.stat-num {
+    display: block;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--primary-color);
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+}
+
+/* AI Cards */
+.ai-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.ai-card {
+    padding: 40px;
+    transition: all 0.3s ease;
+}
+
+.ai-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--primary-color);
+}
+
+.ai-icon {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.ai-card h4 {
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+}
+
+.ai-card p {
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tags span {
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 100px;
+    background: rgba(34, 211, 238, 0.1);
+    color: var(--primary-color);
+    border: 1px solid rgba(34, 211, 238, 0.2);
+}
+
+/* Timeline */
+.timeline {
+    padding: 20px 40px;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 30px;
+    padding-bottom: 50px;
+    border-left: 1px solid var(--glass-border);
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 5px;
+    width: 9px;
+    height: 9px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--primary-glow);
+}
+
+.time-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 15px;
+}
+
+.time-header h4 {
+    font-size: 1.25rem;
+    color: var(--primary-color);
+}
+
+.time-header span {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-dim);
+}
+
+.timeline-item ul {
+    list-style: none;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+}
+
+.timeline-item li {
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 20px;
+}
+
+.timeline-item li::before {
+    content: 'â–¹';
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+}
+
+/* Skills */
+.skills-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+}
+
+.skill-group h5 {
+    color: var(--text-main);
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.skill-group p {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+}
+
+/* AI Evaluator Demo */
+.ai-test-container {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.test-header {
+    background: #1e293b;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.terminal-dots {
+    display: flex;
+    gap: 8px;
+    margin-right: 15px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.dot.red { background-color: #f87171; }
+.dot.yellow { background-color: #fbbf24; }
+.dot.green { background-color: #34d399; }
+
+.test-title {
+    font-family: var(--font-mono);
+    color: var(--text-dim);
+    font-size: 0.85rem;
+}
+
+.test-body, .test-question-container, .test-results {
+    padding: 40px;
+    text-align: center;
+}
+
+.test-intro {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    color: var(--text-main);
+}
+
+.test-disclaimer {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-top: 20px;
+    opacity: 0.7;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.question-text {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.option-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    padding: 15px 20px;
+    color: var(--text-main);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-main);
+    font-size: 1rem;
+    text-align: left;
+}
+
+.option-btn:hover {
+    background: rgba(34, 211, 238, 0.1);
+    border-color: var(--primary-color);
+    transform: translateX(5px);
+}
+
+.option-btn.correct {
+    background: rgba(52, 211, 153, 0.2);
+    border-color: #34d399;
+}
+
+.option-btn.wrong {
+    background: rgba(248, 113, 113, 0.2);
+    border-color: #f87171;
+}
+
+.glitch-small {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.score-text {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+}
+
+.ai-recommendation {
+    padding: 30px;
+    margin: 0 auto 30px;
+    max-width: 600px;
+    text-align: left;
+    border-left: 4px solid var(--primary-color);
+}
+
+/* Footer */
+
+.footer-content h3 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    font-weight: 800;
+}
+
+.footer-content p {
+    color: var(--text-dim);
+    margin-bottom: 40px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.contact-links {
+    margin-bottom: 40px;
+}
+
+.copyright {
+    font-size: 0.8rem;
+    opacity: 0.5;
+}
+
+/* Animations */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.animate-on-scroll.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    h1 { font-size: 3.5rem; }
+    .about-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .footer-content h3 { font-size: 1.8rem; }
+}
+
+</style>
+    <script src="https://kit.fontawesome.com/your-code.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <nav id="navbar">
+        <div class="nav-content">
+            <div class="logo">OA<span>.ai</span></div>
+            <ul class="nav-links">
+                <li><a href="#hero">Inicio</a></li>
+                <li><a href="#about">Perfil</a></li>
+                <li><a href="#ai-ecosystem">IA & Agentes</a></li>
+                <li><a href="#experience">Experiencia</a></li>
+                <li><a href="#contact">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header id="hero">
+        <div class="hero-content">
+            <div class="terminal-badge">available_for: "Tu Empresa"</div>
+            <h1 class="glitch" data-text="Omar Adamo">Omar Adamo</h1>
+            <h2 class="typing-text">AI Python Engineer & Autonomous Agents Architect</h2>
+            <p class="hero-subtitle">Evolucionando la interacciÃ³n humana con ecosistemas de multi-agentes inteligentes y arquitecturas RAG de alta precisiÃ³n.</p>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn primary">Contactar Ahora</a>
+                <a href="#ai-ecosystem" class="btn secondary">Explorar Proyectos</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="about" class="glass-section animate-on-scroll">
+            <div class="section-title">
+                <span>01.</span>
+                <h3>Perfil Profesional</h3>
+            </div>
+            <div class="about-grid">
+                <div class="about-text">
+                    <p>Desarrollador Senior con mÃ¡s de 5 aÃ±os de experiencia, especializado en la creaciÃ³n de soluciones disruptivas donde la **Inteligencia Artificial** no es solo un complemento, sino el motor principal. Experto en transformar requerimientos complejos de negocio en sistemas tÃ©cnicos escalables utilizando Python y arquitecturas de microservicios.</p>
+                    <p>Mi enfoque actual reside en la **IngenierÃ­a de Agentes AutÃ³nomos**, diseÃ±ando flujos de trabajo donde mÃºltiples agentes colaboran, razonan y ejecutan tareas complejas de forma independiente.</p>
+                </div>
+                <div class="about-stats">
+                    <div class="stat-card">
+                        <span class="stat-num">5+</span>
+                        <span class="stat-label">AÃ±os Dev</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-num">10+</span>
+                        <span class="stat-label">Proyectos IA</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ai-ecosystem" class="animate-on-scroll">
+            <div class="section-title">
+                <span>02.</span>
+                <h3>Ecosistema de IA & Agentes</h3>
+            </div>
+            <div class="ai-cards">
+                <div class="ai-card glass">
+                    <div class="ai-icon">ðŸ¤–</div>
+                    <h4>Multi-Agent Systems</h4>
+                    <p>DiseÃ±o de arquitecturas donde agentes especializados (Reasoning, Tool-using, Execution) colaboran mediante frameworks como **LangChain** y **CrewAI**.</p>
+                    <div class="tags">
+                        <span>Memory Management</span>
+                        <span>State Control</span>
+                    </div>
+                </div>
+                <div class="ai-card glass">
+                    <div class="ai-icon">ðŸ“š</div>
+                    <h4>Advanced RAG</h4>
+                    <p>ImplementaciÃ³n de tuberÃ­as de GeneraciÃ³n Aumentada por RecuperaciÃ³n utilizando base de datos vectoriales para respuestas precisas y basadas en contexto tÃ©cnico.</p>
+                    <div class="tags">
+                        <span>Vector DBs</span>
+                        <span>Semantic Search</span>
+                    </div>
+                </div>
+                <div class="ai-card glass">
+                    <div class="ai-icon">ðŸ’³</div>
+                    <h4>Fintech AI</h4>
+                    <p>IntegraciÃ³n de agentes con sistemas financieros y pasarelas de pago, asegurando confiabilidad y lÃ³gica de negocio estricta.</p>
+                    <div class="tags">
+                        <span>Stripe</span>
+                        <span>Risk Analysis</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="glass-section animate-on-scroll">
+            <div class="section-title">
+                <span>03.</span>
+                <h3>Experiencia Destacada</h3>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="time-header">
+                        <h4>Filtro: Talent Management AI</h4>
+                        <span>2024 - Presente</span>
+                    </div>
+                    <ul>
+                        <li>Desarrollo de motor de AI People Analytics para comparaciÃ³n estratÃ©gica de candidatos.</li>
+                        <li>ImplementaciÃ³n de backend robusto en Python para anÃ¡lisis de CVs a gran escala.</li>
+                        <li>Arquitectura de portal de reclutamiento con evaluaciones inteligentes.</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <div class="time-header">
+                        <h4>Libris: Document Intel</h4>
+                        <span>2024</span>
+                    </div>
+                    <ul>
+                        <li>CreaciÃ³n de sistema RAG para gestiÃ³n de documentos interactivos (DOCX, EPUB).</li>
+                        <li>OptimizaciÃ³n de bÃºsqueda semÃ¡ntica y extracciÃ³n de entidades con LLMs.</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <div class="time-header">
+                        <h4>Chofer Online: LogÃ­stica & Pagos</h4>
+                        <span>2024</span>
+                    </div>
+                    <ul>
+                        <li>IntegraciÃ³n de validaciÃ³n segura mediante WhatsApp OTP (Twilio).</li>
+                        <li>Desarrollo de flujos de pago complejos con MercadoPago y Stripe.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="animate-on-scroll">
+            <div class="section-title">
+                <span>04.</span>
+                <h3>Tech Stack</h3>
+            </div>
+            <div class="skills-container">
+                <div class="skill-group">
+                    <h5>Lenguajes & Backend</h5>
+                    <p>Python (Senior), C++, Node.js, SQL.</p>
+                </div>
+                <div class="skill-group">
+                    <h5>IA & Datos</h5>
+                    <p>LangChain, OpenAI SDK, Vector DBs, RAG, Prompt Engineering.</p>
+                </div>
+                <div class="skill-group">
+                    <h5>Frontend & Herramientas</h5>
+                    <p>React (G2 Bootcamp), CSS Premium, Git, Docker, CI/CD.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="ai-test" class="glass-section animate-on-scroll">
+            <div class="section-title">
+                <span>05.</span>
+                <h3>AI Evaluator (Interactive Demo)</h3>
+            </div>
+            <div class="ai-test-container">
+                <div class="test-header">
+                    <div class="terminal-dots">
+                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                    </div>
+                    <span class="test-title">omar_adamo_evaluation.exe</span>
+                </div>
+                <div id="test-body" class="test-body">
+                    <p class="test-intro">Hola. Soy el agente evaluador. Vamos a simular una evaluaciÃ³n tÃ©cnica interactiva para ver si mi perfil encaja con lo que buscas. Responderemos preguntas de varios niveles.</p>
+                    <button class="btn primary" id="start-test-btn">Iniciar EvaluaciÃ³n AI</button>
+                    <p class="test-disclaimer">Nota: Toda la lÃ³gica de "IA" se corre localmente en el navegador.</p>
+                </div>
+                <div id="test-question-container" class="test-question-container" style="display: none;">
+                    <div class="progress-bar-container"><div id="progress-bar" class="progress-bar"></div></div>
+                    <p id="question-text" class="question-text"></p>
+                    <div id="options-container" class="options-container"></div>
+                </div>
+                <div id="test-results" class="test-results" style="display: none;">
+                    <h4 class="glitch-small" data-text="EvaluaciÃ³n Completada">EvaluaciÃ³n Completada</h4>
+                    <p id="score-text" class="score-text"></p>
+                    <div id="ai-recommendation" class="ai-recommendation glass"></div>
+                    <button class="btn secondary" id="restart-test-btn">Re-evaluar</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <div class="footer-content glass">
+            <h3>¿Listo para llevar la IA de tu empresa al siguiente nivel?</h3>
+            <p>Estoy disponible para formar parte del equipo de ingenieros que estÃ¡ redefiniendo el futuro del Fintech.</p>
+            <div class="contact-links">
+                <a href="mailto:adamoomar110@gmail.com" class="btn primary">adamoomar110@gmail.com</a>
+                <div class="social-icons">
+                    <!-- Iconos de redes sociales aquÃ­ -->
+                </div>
+            </div>
+            <p class="copyright">Â© 2026 Omar Adamo. DiseÃ±ado para la excelencia remota.</p>
+        </div>
+    </footer>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show');
+            }
+        });
+    }, observerOptions);
+
+    const animatedElements = document.querySelectorAll('.animate-on-scroll');
+    animatedElements.forEach(el => observer.observe(el));
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+                const navHeight = navbar.offsetHeight;
+                const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navHeight;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Simple typing effect for hero title
+    const typingText = document.querySelector('.typing-text');
+    const text = typingText.innerText;
+    typingText.innerText = '';
+    
+    let i = 0;
+    function typeWriter() {
+        if (i < text.length) {
+            typingText.append(text.charAt(i));
+            i++;
+            setTimeout(typeWriter, 50);
+        }
+    }
+    
+    // Start typing effect after brief delay
+    setTimeout(typeWriter, 1000);
+
+    // Glitch effect hover triggers can be added here if needed
+
+    // AI Evaluator Logic
+    const questions = [
+        {
+            level: "Nivel 1 (Fundamentos)",
+            text: "Â¿CuÃ¡l es el propÃ³sito de HTML5 semÃ¡ntico en el desarrollo web moderno?",
+            options: [
+                "AÃ±adir colores y animaciones directamente al texto.",
+                "Estructurar el contenido para mejorar el SEO y la accesibilidad.",
+                "Crear bases de datos en el navegador.",
+                "Ejecutar agentes autÃ³nomos."
+            ],
+            correct: 1
+        },
+        {
+            level: "Nivel 3 (Backend)",
+            text: "Â¿QuÃ© rol juega un sistema de Testing como 'Unittest' en el cÃ³digo Python de Omar?",
+            options: [
+                "Garantiza que el cÃ³digo nuevo no rompa las funcionalidades existentes.",
+                "Hackea la base de datos de los competidores.",
+                "Aumenta la velocidad de carga del CSS.",
+                "Traduce cÃ³digo Python a C++."
+            ],
+            correct: 0
+        },
+        {
+            level: "Nivel 5 (IA - RAG)",
+            text: "En el proyecto 'Libris', Â¿para quÃ© se utiliza la arquitectura RAG (Retrieval-Augmented Generation)?",
+            options: [
+                "Para hacer que la interfaz de usuario sea mÃ¡s bonita.",
+                "Para generar respuestas de IA basadas exclusivamente en documentos tÃ©cnicos propios, evitando alucinaciones.",
+                "Para cobrar pagos recurrentes con Stripe.",
+                "Para enviar mensajes OTP por WhatsApp."
+            ],
+            correct: 1
+        },
+        {
+            level: "Nivel 6 (Agentes AutÃ³nomos)",
+            text: "Si necesitas un sistema donde varios agentes razonen, colaboren y usen herramientas (ej. Filtro o RolPlay.ai), Â¿quÃ© usas?",
+            options: [
+                "Solo HTML y CSS.",
+                "Una base de datos SQL normal.",
+                "Un framework de agentes como LangChain o CrewAI integrado con LLMs.",
+                "Excel y macros en VBA."
+            ],
+            correct: 2
+        }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    const startBtn = document.getElementById('start-test-btn');
+    const restartBtn = document.getElementById('restart-test-btn');
+    const testBody = document.getElementById('test-body');
+    const questionContainer = document.getElementById('test-question-container');
+    const resultsContainer = document.getElementById('test-results');
+    
+    const questionText = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const progressBar = document.getElementById('progress-bar');
+    
+    const scoreText = document.getElementById('score-text');
+    const aiRecommendation = document.getElementById('ai-recommendation');
+
+    startBtn.addEventListener('click', startTest);
+    restartBtn.addEventListener('click', startTest);
+
+    function startTest() {
+        currentQuestion = 0;
+        score = 0;
+        testBody.style.display = 'none';
+        resultsContainer.style.display = 'none';
+        questionContainer.style.display = 'block';
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        optionsContainer.innerHTML = '';
+        const q = questions[currentQuestion];
+        
+        questionText.innerHTML = `<span style="color: var(--primary-color); font-size:0.9rem">[${q.level}]</span><br>${q.text}`;
+        
+        progressBar.style.width = `${((currentQuestion) / questions.length) * 100}%`;
+
+        q.options.forEach((opt, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.addEventListener('click', () => selectOption(index, btn));
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function selectOption(selectedIndex, btnElement) {
+        // Disable all buttons
+        const allBtns = optionsContainer.querySelectorAll('.option-btn');
+        allBtns.forEach(b => b.disabled = true);
+
+        const q = questions[currentQuestion];
+        
+        if (selectedIndex === q.correct) {
+            btnElement.classList.add('correct');
+            score++;
+        } else {
+            btnElement.classList.add('wrong');
+            allBtns[q.correct].classList.add('correct');
+        }
+
+        setTimeout(() => {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }, 1500);
+    }
+
+    function showResults() {
+        questionContainer.style.display = 'none';
+        resultsContainer.style.display = 'block';
+        progressBar.style.width = '100%';
+
+        const percentage = (score / questions.length) * 100;
+        scoreText.innerText = `PrecisiÃ³n: ${percentage}% (${score}/${questions.length})`;
+
+        let recommendation = "";
+        
+        if (percentage === 100) {
+            recommendation = "<strong>AnÃ¡lisis:</strong> Excelente comprensiÃ³n tÃ©cnica.<br><br><strong>RecomendaciÃ³n IA:</strong> El perfil de Omar se ajusta perfectamente a las necesidades de tus proyectos avanzados de Inteligencia Artificial. Sugiero pactar una entrevista tÃ©cnica lo antes posible.";
+        } else if (percentage >= 50) {
+            recommendation = "<strong>AnÃ¡lisis:</strong> Buen nivel de comprensiÃ³n general, aunque hay detalles tÃ©cnicos sobre Agentes o RAG que pueden profundizarse.<br><br><strong>RecomendaciÃ³n IA:</strong> Omar tiene la experiencia concreta en estos sistemas (Filtro, Libris). Contratarlo ahorrarÃ¡ meses de investigaciÃ³n a tu equipo.";
+        } else {
+            recommendation = "<strong>AnÃ¡lisis:</strong> Parece que el ecosistema de IA moderna y desarrollo Full-Stack es nuevo para ti.<br><br><strong>RecomendaciÃ³n IA:</strong> La curva de aprendizaje desde cero hasta Arquitecto de Agentes es pronunciada. Incorporar a Omar Adamo acelerarÃ¡ tu producto de IA inmediatamente.";
+        }
+
+        aiRecommendation.innerHTML = recommendation;
+    }
+
+});
+
+</script>
+</body>
+</html>
+
